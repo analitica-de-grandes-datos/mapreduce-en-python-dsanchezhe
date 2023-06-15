@@ -1,20 +1,45 @@
-#
+##
 # >>> Escriba el codigo del reducer a partir de este punto <<<
 #
 import sys
-biggest_amount = {}
-smaller_amount = {}
 
-def set_bigger_smaller_amount(biggest_amount, smaller_amount, actual_element):
-    element_array = actual_element.split("*")
-    biggest_amount[element_array[0]] = max(
-        float(biggest_amount.get(element_array[0]) or 0), float(element_array[1]))
-    smaller_amount[element_array[0]] = min(
-        float(smaller_amount.get(element_array[0]) or 10000), float(element_array[1]))
-    return biggest_amount, smaller_amount
+if __name__ == '__main__':
 
-for line in sys.stdin:
-    set_bigger_smaller_amount(biggest_amount, smaller_amount, line)
+    curkey = None
+    listaElementos = []
+    #
+    # cada linea de texto recibida es una entrada clave \tabulador valor
+    #
+    for line in sys.stdin:
 
-for max, min in zip(biggest_amount.items(), smaller_amount.items()):
-    print( max[0] + "	" + str(max[1]) + "	" + str(min[1]) )
+        key, val = line.split("\t")
+        val = float(val)
+        
+        if key == curkey:
+            #
+            # No se ha cambiado de clave. Aca se acumulan los valores para la misma
+            # clave.
+            #
+            listaElementos.append(val)
+        else:
+            #
+            # Se cambio de clave. Se reinicia el acumulador.
+            #
+            if curkey is not None:
+                #
+                # una vez se han reducido todos los elementos
+                # con la misma clave se imprime el resultado en
+                # el flujo de salida
+                #
+                maximo = max(listaElementos)
+                minimo = min(listaElementos)
+                listaElementos.clear()                
+
+                sys.stdout.write("{}\t{}\t{}\n".format(curkey, maximo, minimo))
+
+            curkey = key
+            listaElementos.append(val)               
+
+    maximo = max(listaElementos)
+    minimo = min(listaElementos)
+    sys.stdout.write("{}\t{}\t{}\n".format(curkey, maximo, minimo))
