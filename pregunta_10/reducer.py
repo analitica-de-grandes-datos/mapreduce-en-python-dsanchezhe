@@ -2,23 +2,38 @@
 # >>> Escriba el codigo del reducer a partir de este punto <<<
 #
 import sys
-elements = {}
-def clear_spaces(x):
-    x = x.replace("\n", "")
-    x = x.replace("\r", "")
-    return x
 
-def set_bigger_smaller_amount(elements, actual_element):
-    element_array = actual_element.split("*")
-    if element_array[0] in elements:
-        elements[element_array[0]] = elements.get(element_array[0]) +  [int(clear_spaces(element_array[1]))]
-    else:
-        elements[element_array[0]] = [int(clear_spaces(element_array[1]))]
-    return elements
+#
+# Esta funcion reduce los elementos que tienen la misma clave
+#
+if __name__ == '__main__':
 
-for line in sys.stdin:
-    set_bigger_smaller_amount(elements, line)
+    diccionarioLetras = {}
 
-for element, array in  elements.items():
-    array = ','.join(str(v) for v in sorted(array))
-    print(element + "	" + array)
+    #
+    # cada linea de texto recibida es una entrada clave \tabulador valor
+    #
+    for line in sys.stdin:
+
+        key, val = line.split("\t")
+        val = val.strip().split(",")
+
+        #por cada letra de val obtener cada uno de los key asociados
+        for i in val:
+            if i not in diccionarioLetras.keys():
+                diccionarioLetras[i] = key
+            else:
+                diccionarioLetras[i] += ',' + key           
+
+        sortedDict = sorted(diccionarioLetras.items(), key=lambda x: x[0])
+
+    #for i in sortedDict:
+    #    sys.stdout.write("{}\t{}\n".format(i[0], i[1]))
+
+
+    #imprimir el diccionario
+    for key, valorOrdenado in sortedDict:
+        resultado = sorted(valorOrdenado.split(','), key = int)
+        valorOrdenado = ",".join(map(str, resultado))
+
+        sys.stdout.write("{}\t{}\n".format(key, valorOrdenado))
