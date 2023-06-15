@@ -2,44 +2,14 @@
 # >>> Escriba el codigo del reducer a partir de este punto <<<
 #
 import sys
+biggest_purposes = {}
 
-#
-# Esta funcion reduce los elementos que tienen la misma clave
-#
-import sys
+def set_bigger_purpose(dictionary_purposes, actual_element):
+    dictionary_purposes[actual_element] = int(dictionary_purposes.get(actual_element) or 0)  +1 
+    return dictionary_purposes
 
-if __name__ == '__main__':
+for line in sys.stdin:
+    set_bigger_purpose(biggest_purposes, line.replace("\n", ""))
 
-    curkey = None
-    total = 0
-
-    #
-    # cada linea de texto recibida es una entrada clave \tabulador valor
-    #
-    for line in sys.stdin:
-
-        key, val = line.split("\t")
-        val = int(val)
-
-        if key == curkey:
-            #
-            # No se ha cambiado de clave. Aca se acumulan los valores para la misma
-            # clave.
-            #
-            total += val
-        else:
-            #
-            # Se cambio de clave. Se reinicia el acumulador.
-            #
-            if curkey is not None:
-                #
-                # una vez se han reducido todos los elementos
-                # con la misma clave se imprime el resultado en
-                # el flujo de salida
-                #
-                sys.stdout.write("{}\t{}\n".format(curkey, total))
-
-            curkey = key
-            total = val
-
-    sys.stdout.write("{}\t{}\n".format(curkey, total))
+for purpose, amount in biggest_purposes.items():
+    print(purpose + "	" + str(amount))

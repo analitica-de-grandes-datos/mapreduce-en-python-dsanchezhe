@@ -1,41 +1,16 @@
 import sys
+biggest_purposes = {}
 
-#
-# Esta funcion reduce los elementos que tienen la misma clave
-#
-if __name__ == '__main__':
 
-    curkey = None
-    mayor = 0
+def set_bigger_purpose(dictionary_purposes, actual_element):
+    element_array = actual_element.split("*")
+    dictionary_purposes[element_array[0]] = max(
+        int(dictionary_purposes.get(element_array[0]) or 0), int(element_array[1]))
+    return dictionary_purposes
 
-    #
-    # cada linea de texto recibida es una entrada clave \tabulador valor
-    #
-    for line in sys.stdin:
 
-        key, val = line.split("\t")
-        val = int(val)
+for line in sys.stdin:
+    set_bigger_purpose(biggest_purposes, line)
 
-        if key == curkey:
-            #
-            # No se ha cambiado de clave. Aca se acumulan los valores para la misma
-            # clave.
-            #
-            if val > mayor:
-                mayor = val            
-        else:
-            #
-            # Se cambio de clave. Se reinicia el acumulador.
-            #
-            if curkey is not None:
-                #
-                # una vez se han reducido todos los elementos
-                # con la misma clave se imprime el resultado en
-                # el flujo de salida
-                #
-                sys.stdout.write("{}\t{}\n".format(curkey, mayor))
-
-            curkey = key
-            mayor = val
-
-    sys.stdout.write("{}\t{}\n".format(curkey, mayor))
+for purpose, amount in biggest_purposes.items():
+    print(purpose + "	" + str(amount))
