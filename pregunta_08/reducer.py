@@ -1,18 +1,46 @@
-#
+##
 # >>> Escriba el codigo del reducer a partir de este punto <<<
 #
+from audioop import avg
 import sys
-sum = {}
-counted = {}
 
-def set_bigger_smaller_amount(sum, counted, actual_element):
-    element_array = actual_element.split("*")
-    sum[element_array[0]] = float(sum.get(element_array[0]) or 0) + float(element_array[1])
-    counted[actual_element[0]] = float(counted.get(actual_element[0]) or 0)  +1 
-    return sum, counted
+if __name__ == '__main__':
 
-for line in sys.stdin:
-    set_bigger_smaller_amount(sum, counted, line)
+    curkey = None
+    listaElementos = []
+    #
+    # cada linea de texto recibida es una entrada clave \tabulador valor
+    #
+    for line in sys.stdin:
 
-for max, min in zip(sum.items(), counted.items()):
-    print( max[0] + "	" + str(max[1]) + "	" + str(float(max[1])/float(min[1])) )
+        key, val = line.split("\t")
+        val = float(val)
+        
+        if key == curkey:
+            #
+            # No se ha cambiado de clave. Aca se acumulan los valores para la misma
+            # clave.
+            #
+            listaElementos.append(val)
+        else:
+            #
+            # Se cambio de clave. Se reinicia el acumulador.
+            #
+            if curkey is not None:
+                #
+                # una vez se han reducido todos los elementos
+                # con la misma clave se imprime el resultado en
+                # el flujo de salida
+                #
+                suma = sum(listaElementos)
+                prom = suma / len(listaElementos)
+                listaElementos.clear()                
+
+                sys.stdout.write("{}\t{}\t{}\n".format(curkey, suma, prom))
+
+            curkey = key
+            listaElementos.append(val)               
+
+    suma = sum(listaElementos)
+    prom = suma / len(listaElementos)
+    sys.stdout.write("{}\t{}\t{}\n".format(curkey, suma, prom))
