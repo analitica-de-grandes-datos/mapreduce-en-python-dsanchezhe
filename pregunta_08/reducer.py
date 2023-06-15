@@ -1,33 +1,27 @@
 #
 # >>> Escriba el codigo del reducer a partir de este punto <<<
 #
+from audioop import avg
 import sys
 
-#
-# Esta funcion reduce los elementos que tienen la misma clave
-#
 if __name__ == '__main__':
 
     curkey = None
-    total = 0
-    suma = 0
-
+    listaElementos = []
     #
     # cada linea de texto recibida es una entrada clave \tabulador valor
     #
     for line in sys.stdin:
 
-        key, val, val2 = line.split("\t")
+        key, val = line.split("\t")
         val = float(val)
-        val2= float(val2)
-
+        
         if key == curkey:
             #
             # No se ha cambiado de clave. Aca se acumulan los valores para la misma
             # clave.
             #
-            total += val2
-            suma += val
+            listaElementos.append(val)
         else:
             #
             # Se cambio de clave. Se reinicia el acumulador.
@@ -38,10 +32,15 @@ if __name__ == '__main__':
                 # con la misma clave se imprime el resultado en
                 # el flujo de salida
                 #
-                sys.stdout.write("{}\t{}\t{}\n".format(curkey, suma, suma/total))
+                suma = sum(listaElementos)
+                prom = suma / len(listaElementos)
+                listaElementos.clear()                
+
+                sys.stdout.write("{}\t{}\t{}\n".format(curkey, suma, prom))
 
             curkey = key
-            total = val2
-            suma = val
+            listaElementos.append(val)               
 
-    sys.stdout.write("{}\t{}\t{}\n".format(curkey, suma, suma/total))
+    suma = sum(listaElementos)
+    prom = suma / len(listaElementos)
+    sys.stdout.write("{}\t{}\t{}\n".format(curkey, suma, prom))

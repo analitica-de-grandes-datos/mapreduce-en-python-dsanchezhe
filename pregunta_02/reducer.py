@@ -1,11 +1,12 @@
-#
-# >>> Escriba el codigo del reducer a partir de este punto <<<
-#
 import sys
+
+#
+# Esta funcion reduce los elementos que tienen la misma clave
+#
 if __name__ == '__main__':
 
     curkey = None
-    total = 0
+    mayor = 0
 
     #
     # cada linea de texto recibida es una entrada clave \tabulador valor
@@ -20,10 +21,8 @@ if __name__ == '__main__':
             # No se ha cambiado de clave. Aca se acumulan los valores para la misma
             # clave.
             #
-            if total > val:
-                total = total
-            else:
-                total = val
+            if val > mayor:
+                mayor = val            
         else:
             #
             # Se cambio de clave. Se reinicia el acumulador.
@@ -34,9 +33,9 @@ if __name__ == '__main__':
                 # con la misma clave se imprime el resultado en
                 # el flujo de salida
                 #
-                sys.stdout.write("{}\t{}\n".format(curkey, total))
+                sys.stdout.write("{}\t{}\n".format(curkey, mayor))
 
             curkey = key
-            total = val
+            mayor = val
 
-    sys.stdout.write("{}\t{}\n".format(curkey, total))
+    sys.stdout.write("{}\t{}\n".format(curkey, mayor))

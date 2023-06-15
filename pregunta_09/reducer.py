@@ -3,9 +3,22 @@
 #
 import sys
 
-if __name__ == "__main__":
-    count = 0
+if __name__ == '__main__':
+
+    listaTuplas = []
+    #
+    # cada linea de texto recibida es una entrada clave \tabulador valor
+    #
     for line in sys.stdin:
-        sys.stdout.write("{}   {}   {}\n".format(line.split('   ')[1], line.split('   ')[2].strip() , int(line.split('   ')[0])))
-        if count >= 5: break;
-        count = count +1
+
+        key, fecha, numero = line.split("\t")
+        numero = int(numero)
+        tupla = key, fecha, numero
+        listaTuplas.append(tupla)
+        
+    #ordernar el diccionario
+    tuplaOrdenada = sorted(listaTuplas, key=lambda x: x[2])
+
+    #imprimir diccionario
+    for tupla in tuplaOrdenada[0:6]:
+        sys.stdout.write("{}   {}   {}\n".format(tupla[0], tupla[1], tupla[2]))
